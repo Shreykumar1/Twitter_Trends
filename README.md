@@ -1,5 +1,7 @@
 # STIR Twitter Trends Viewer
-
+##IMAGES
+![image](https://github.com/user-attachments/assets/9c7bf95d-4d21-4131-854e-f94d8532349f)
+![image](https://github.com/user-attachments/assets/9509ef94-8fa4-42a1-b6bc-2ab7d65f7bc1)
 ## Overview
 
 STIR Twitter Trends Viewer is a web application designed to fetch and display the top trending topics on Twitter. Utilizing technologies such as Selenium, ProxyMesh, and MongoDB, it provides a seamless experience for users to access real-time trends.
