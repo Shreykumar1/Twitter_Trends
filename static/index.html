@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STIR Twitter Trends Viewer</title>
+    <style>
+      body {
+        font-family: 'Helvetica Neue', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #121212;
+        color: #e0e0e0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #1e1e1e;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #bb86fc;
+      }
+
+      button {
+        background-color: #bb86fc;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background: linear-gradient(45deg, #3700b3, #bb86fc);
+        scale: 1.05;
+      }
+
+      #output {
+        margin-top: 20px;
+        text-align: left;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      ul li {
+        background: #2c2c2c;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 5px;
+        color: #e0e0e0;
+        font-size: 16px;
+      }
+
+      pre {
+        background: #1e1e1e;
+        padding: 10px;
+        border: 1px solid #333;
+        border-radius: 5px;
+        overflow-x: auto;
+        font-size: 14px;
+        color: #e0e0e0;
+      }
+
+      p strong {
+        color: #bb86fc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>STIR Twitter Trends Viewer</h1>
+      <button id="execute-button">Click here to run the script</button>
+      <div id="output"></div>
+    </div>
+    <script>
+      document
+        .getElementById("execute-button")
+        .addEventListener("click", async () => {
+          const outputDiv = document.getElementById("output");
+          outputDiv.innerHTML = "Running script, please wait...";
+
+          try {
+            const response = await fetch("/execute-script");
+            const data = await response.json();
+
+            if (response.ok) {
+              outputDiv.innerHTML = `
+                <p><strong>These are the most trending topics as on:</strong> ${data.timestamp}</p>
+                <ul>
+                  ${data.trends.map((item) => `
+                    <li>
+                      <h2>${item}</h2>
+
+                    </li>
+                  `).join("")}
+                </ul>
+                <p><strong>The IP address used for this query was:</strong> ${data.ip_address}</p>
+                <pre><strong>Here’s a JSON extract of this record from the MongoDB:</strong> ${JSON.stringify(
+                  data,
+                  null,
+                  2
+                )}</pre>
+              `;
+            } else {
+              outputDiv.innerHTML = `Error: ${data.error}`;
+            }
+          } catch (error) {
+            outputDiv.innerHTML = `Error: ${error.message}`;
+          }
+        });
+    </script>
+  </body>
+</html>
